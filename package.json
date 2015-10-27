@@ -1,0 +1,18 @@
+{
+  "name": "drone-controller",
+  "version": "1.0.0",
+  "description": "Program to control the parrot drone with ps4 controller",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ar-drone": "^0.3.3",
+    "commander": "^2.8.1",
+    "gamepad": "^1.1.0",
+    "node-gamepad": "^0.1.14",
+    "node-pre-gyp": "^0.6.12"
+  }
+}
