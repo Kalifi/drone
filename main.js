@@ -1,7 +1,7 @@
 /**
  * Module dependencies.
  */
- 
+
 var gamepad = require("gamepad");
 var arDrone = require('ar-drone');
 var program = require('commander');
@@ -31,11 +31,22 @@ var client  = arDrone.createClient({ ip: program.ip });
 console.log('Connecting to drone at %j', program.ip);
 
 /**
+ * Show remaining battery percentage from navdata
+ */
+var battery = null;
+client.on('navdata', function (navdata) {
+  if (navdata && navdata.demo && navdata.demo.batteryPercentage && battery !== navdata.demo.batteryPercentage) {
+    battery = navdata.demo.batteryPercentage;
+    console.log("Battery percentage:", battery);
+  }
+});
+
+/**
  * Init Gamepad library
  */
- 
+
 // Initialize the library
-gamepad.init()
+gamepad.init();
 
 // List the state of all currently attached devices
 for (var i = 0, l = gamepad.numDevices(); i < l; i++) {
@@ -49,17 +60,17 @@ setInterval(gamepad.detectDevices, 500);
 
 // Listen for move events on all gamepads
 gamepad.on("move", function (id, axis, value) {
-	data = config.axis[axis];
-	if (!data) return;
-	func = data[value > 0 ? 1 : 0];
-	client[func](Math.abs(value));
+  data = config.axis[axis];
+  if (!data) return;
+  func = data[value > 0 ? 1 : 0];
+  client[func](Math.abs(value));
 });
 
 // Listen for button down events on all gamepads
 gamepad.on("down", function (id, num) {
-	console.log("id: " + id + ", value: " + num);
   data = config.buttons[num];
-	if (!data) return;
-	func = data[0];
-	client[func]();
+  if (!data) return;
+  func = data[0];
+  console.log("id: " + id + ", value: " + num, func);
+  client[func]();
 });
